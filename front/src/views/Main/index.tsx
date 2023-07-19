@@ -47,25 +47,38 @@ export default function Main() {
     )
   }
 
+  //          component         //
+  // description : 메인 화면 하단 //
   const MainBottom = () => {
-    const [currentList, setCurrentList] = useState<CurrentListResponseDto[]>([]);
-    const [popularList, setPopularList] = useState<string[]>([]);
 
+    //      state     //
+    // description : 최신 게시물 리스트 상태  // 
+    const [currentList, setCurrentList] = useState<CurrentListResponseDto[]>([]);
+    // description : 인기게시물 상태
+    const [popularList, setPopularList] = useState<string[]>([]);
+    // description : 페이지네이션 관련 상태 및 함수 // 
     const { totalPage, currentPage, currentSection, onPageClickHandler, onNextClickHandler, onPreviousClickHandler, changeSection } = usePagination();
 
+    // event handler // 
+    // description: 인기 검색어 클릭 이벤트 // 
     const onPopularClickHandler = (word: string) => {
       navigator(`/search/${word}`);
     }
 
+    //        effect        // 
+    // description : 첫 시작 시 인기 검색어 리스트 불러오기 //
+    useEffect(() => {
+      if (!popularList.length) setPopularList(popularWordListMock);
+    }, []);
+
+    // description : 현재 섹션이 바뀔 때 마다 페이지 리스트 변경 및 최신 게시물 불러오기 // 
     useEffect(() => {
       changeSection(72);
       if (!currentList.length) setCurrentList(currentBoardListMock);
     }, [currentSection]);
 
-    useEffect(() => {
-      if (!popularList.length) setPopularList(popularWordListMock);
-    }, []);
 
+    //          render          //
     return (
       <div className='main-bottom'>
         <div className='main-bottom-text'>최신 게시물</div>
@@ -93,6 +106,9 @@ export default function Main() {
     )
   }
 
+
+
+  //          render          // 
   return (
     <div id='main-wrapper'>
       <MainTop />
